@@ -87,164 +87,159 @@ Double quote convention should be followed throughout the website.
 
 <!-- Bad-->
 <div class='main'>
-
 ````
 
-Markdown is a lightweight markup language based on the formatting conventions that people naturally use in email.  As [John Gruber] writes on the [Markdown site][df1]
+### Atribute order
+HTML attributes should be in this order for facilitate the reading.
 
-> The overriding design goal for Markdown's
-> formatting syntax is to make it as readable
-> as possible. The idea is that a
-> Markdown-formatted document should be
-> publishable as-is, as plain text, without
-> looking like it's been marked up with tags
-> or formatting instructions.
+* class
+* id, name
+* src, for, type, href
+* data-*
+* title, alt
+* aria-*, role
 
-This text you see here is *actually* written in Markdown! To get a feel for Markdown's syntax, type some text into the left window and watch the results in the right.
 
-### Tech
-
-Dillinger uses a number of open source projects to work properly:
-
-* [AngularJS] - HTML enhanced for web apps!
-* [Ace Editor] - awesome web-based text editor
-* [markdown-it] - Markdown parser done right. Fast and easy to extend.
-* [Twitter Bootstrap] - great UI boilerplate for modern web apps
-* [node.js] - evented I/O for the backend
-* [Express] - fast node.js network app framework [@tjholowaychuk]
-* [Gulp] - the streaming build system
-* [Breakdance](http://breakdance.io) - HTML to Markdown converter
-* [jQuery] - duh
-
-And of course Dillinger itself is open source with a [public repository][dill]
- on GitHub.
-
-### Installation
-
-Dillinger requires [Node.js](https://nodejs.org/) v4+ to run.
-
-Install the dependencies and devDependencies and start the server.
-
-```sh
-$ cd dillinger
-$ npm install -d
-$ node app
+## CSS Guidelines 
+### General
+- Avoid using HTML tags in CSS selectors
+- Don't use ids in selectors
+- Don’t nest more than 3 levels deep
+- Avoid using nesting for anything other than pseudo selectors and state selectors.
+- Don't use `!important` - If you must, leave a comment, and prioritise resolving specificity issues before resorting to `!important`.
+- Use shorthand properties
+- Avoid user agent detection as well as CSS “hacks”—try a different approach first.
+- All the color codes should be in lowercase
+### Spacing
+- Put spaces after `:` in property declarations
+  - E.g. `color: red;` instead of `color:red;`
+- Put spaces before `{` in rule declarations
+  - E.g. `.o-modal {` instead of `.o-modal{`
+- Write your CSS one line per property
+- Add a line break after `}` closing rule declarations
+- When grouping selectors, keep individual selectors on a single line
+- Place closing braces `}` on a new line
+- Add a new line at the end of .scss files
+- Trim excess whitespace
+### Naming Convention - BEM
+The naming convention follows the following pattern along with lowercase
+```css
+.block {}
+.block__element {}
+.block--modifier {}
+````
+- **.block**  represents the higher level of an abstraction or component.
+- **.block__element**  represents a descendent of .block that helps form .block as a whole.
+- **.block--modifier**  represents a different state or version of .block.
+Here's an example:
+```html
+<div class="contact-card">
+ <h2 class="contact-card__name">Person</h2>
+ <div class="contact-card__content">
+   <p class="contact-card__content__details">
+     Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nesciunt
+   </p>
+ </div>
+ <button class="contact-card__btn contact-card__btn--primay">
+   Accept
+ </button>
+  <button class="contact-card__btn contact-card__btn--secondary">
+   Reject
+ </button>
+</div>
+````
+### Rule ordering
+Properties and nested declarations should appear in the following order
+1. Layout and box-model properties
+   - margin, padding, box-sizing, overflow, position, display, width/height, etc.
+2. Typographic properties
+   - E.g. font-*, line-height, letter-spacing, text-*, etc.
+3. Stylistic properties
+   - color, background-*, animation, border, etc.
+4. UI properties
+   - appearance, cursor, user-select, pointer-events, etc.
+5. Pseudo-elements
+    - ::after, ::before, ::selection, etc.
+6. Pseudo-selectors
+   - :hover, :focus, :active, etc.
+7. Modifier classes
+8. Child elements if applicable
+Here’s a comprehensive example:
+```css
+.hf-btn {
+  display: inline-block;
+  padding: 6px 12px;
+  text-align: center;
+  font-weight: 600;
+  background-color: red;
+  border-radius: 3px;
+  color: white;
+}
+.hf-btn::before {
+  content: '';
+}
+.hf-btn:focus, .hf-btn:hover {
+  box-shadow: 0 0 0 1px color(blue, 0.3);
+}
+.hf-btn--big {
+  padding: 12px 24px;
+}
+.hf-btn > .hf-icon {
+  margin-right: 6px;
+}
 ```
+### Media Queries
+Start the development with generic rules with and add media queries with mobile first.
+```css
+/* Good */
+.navbar {
+  margin-bottom: 20px;
+}
+@media (min-width: 768px) {
+  .navbar {
+    padding: 10px;
+  }
+}
+/* Bad */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+@media (max-width: 767px) {
+  .navbar {
+    position: static;
+    padding: 10px;
+  }
+}
+````
 
-For production environments...
+## Accessibility
 
-```sh
-$ npm install --production
-$ NODE_ENV=production node app
-```
+### General
 
-### Plugins
-
-Dillinger is currently extended with the following plugins. Instructions on how to use them in your own application are linked below.
-
-| Plugin | README |
-| ------ | ------ |
-| Dropbox | [plugins/dropbox/README.md][PlDb] |
-| Github | [plugins/github/README.md][PlGh] |
-| Google Drive | [plugins/googledrive/README.md][PlGd] |
-| OneDrive | [plugins/onedrive/README.md][PlOd] |
-| Medium | [plugins/medium/README.md][PlMe] |
-| Google Analytics | [plugins/googleanalytics/README.md][PlGa] |
-
-
-### Development
-
-Want to contribute? Great!
-
-Dillinger uses Gulp + Webpack for fast developing.
-Make a change in your file and instantanously see your updates!
-
-Open your favorite Terminal and run these commands.
-
-First Tab:
-```sh
-$ node app
-```
-
-Second Tab:
-```sh
-$ gulp watch
-```
-
-(optional) Third:
-```sh
-$ karma test
-```
-#### Building for source
-For production release:
-```sh
-$ gulp build --prod
-```
-Generating pre-built zip archives for distribution:
-```sh
-$ gulp build dist --prod
-```
-### Docker
-Dillinger is very easy to install and deploy in a Docker container.
-
-By default, the Docker will expose port 8080, so change this within the Dockerfile if necessary. When ready, simply use the Dockerfile to build the image.
-
-```sh
-cd dillinger
-docker build -t joemccann/dillinger:${package.json.version} .
-```
-This will create the dillinger image and pull in the necessary dependencies. Be sure to swap out `${package.json.version}` with the actual version of Dillinger.
-
-Once done, run the Docker image and map the port to whatever you wish on your host. In this example, we simply map port 8000 of the host to port 8080 of the Docker (or whatever port was exposed in the Dockerfile):
-
-```sh
-docker run -d -p 8000:8080 --restart="always" <youruser>/dillinger:${package.json.version}
-```
-
-Verify the deployment by navigating to your server address in your preferred browser.
-
-```sh
-127.0.0.1:8000
-```
-
-#### Kubernetes + Google Cloud
-
-See [KUBERNETES.md](https://github.com/joemccann/dillinger/blob/master/KUBERNETES.md)
+- Use h1 - h6 to identify headings - [Read more &raquo;](http://www.w3.org/TR/2008/NOTE-WCAG20-TECHS-20081211/html.html#H4)
+- Use structural elements to group links - [Read more &raquo;](http://www.w3.org/TR/2008/NOTE-WCAG20-TECHS-20081211/html.html#H50)
+- Provide definitions for abbreviations by using the abbr and acronym elements - [Read more &raquo;](http://www.w3.org/TR/2008/NOTE-WCAG20-TECHS-20081211/html.html#H28)
+- Use language attributes on html element to identify the default language of a document - [Read more &raquo;](http://www.w3.org/TR/2008/NOTE-WCAG20-TECHS-20081211/html.html#H57)
 
 
-### Todos
+### Tables
 
- - Write MORE Tests
- - Add Night Mode
+- Use table markup to present tabular information - [Read more &raquo;](http://www.w3.org/TR/2008/NOTE-WCAG20-TECHS-20081211/html.html#H51)
+- Use the scope attribute to associate header cells and data cells in data tables - [Read more &raquo;](http://www.w3.org/TR/2008/NOTE-WCAG20-TECHS-20081211/html.html#H63)
+- Use the summary attribute of the table element to give an overview of data tables - [Read more &raquo;](http://www.w3.org/TR/2008/NOTE-WCAG20-TECHS-20081211/html.html#H73)
 
-License
-----
+### Forms
 
-MIT
+- Provide submit buttons - [Read more &raquo;](http://www.w3.org/TR/2008/NOTE-WCAG20-TECHS-20081211/html.html#H32)
+- Use alt attributes on images used as submit buttons - [Read more &raquo;](http://www.w3.org/TR/2008/NOTE-WCAG20-TECHS-20081211/html.html#H36)
+- Use label elements to associate text labels with form controls - [Read more &raquo;](http://www.w3.org/TR/2008/NOTE-WCAG20-TECHS-20081211/html.html#H44)
+- Use the title attribute to identify form controls when the label element cannot be used - [Read more &raquo;](http://www.w3.org/TR/2008/NOTE-WCAG20-TECHS-20081211/html.html#H65)
+- Indicate required form controls - [Read more &raquo;](http://www.w3.org/TR/2008/NOTE-WCAG20-TECHS-20081211/html.html#H90)
 
+### Images
 
-**Free Software, Hell Yeah!**
+- Use alt attributes on img elements - [Read more &raquo;](http://www.w3.org/TR/2008/NOTE-WCAG20-TECHS-20081211/html.html#H37)
+- Use null alt text and no title attribute on img elements for images that Assistive Technology should ignore - [Read more &raquo;](http://www.w3.org/TR/2008/NOTE-WCAG20-TECHS-20081211/html.html#H67)
 
-[//]: # (These are reference links used in the body of this note and get stripped out when the markdown processor does its job. There is no need to format nicely because it shouldn't be seen. Thanks SO - http://stackoverflow.com/questions/4823468/store-comments-in-markdown-syntax)
-
-
-   [dill]: <https://github.com/joemccann/dillinger>
-   [git-repo-url]: <https://github.com/joemccann/dillinger.git>
-   [john gruber]: <http://daringfireball.net>
-   [df1]: <http://daringfireball.net/projects/markdown/>
-   [markdown-it]: <https://github.com/markdown-it/markdown-it>
-   [Ace Editor]: <http://ace.ajax.org>
-   [node.js]: <http://nodejs.org>
-   [Twitter Bootstrap]: <http://twitter.github.com/bootstrap/>
-   [jQuery]: <http://jquery.com>
-   [@tjholowaychuk]: <http://twitter.com/tjholowaychuk>
-   [express]: <http://expressjs.com>
-   [AngularJS]: <http://angularjs.org>
-   [Gulp]: <http://gulpjs.com>
-
-   [PlDb]: <https://github.com/joemccann/dillinger/tree/master/plugins/dropbox/README.md>
-   [PlGh]: <https://github.com/joemccann/dillinger/tree/master/plugins/github/README.md>
-   [PlGd]: <https://github.com/joemccann/dillinger/tree/master/plugins/googledrive/README.md>
-   [PlOd]: <https://github.com/joemccann/dillinger/tree/master/plugins/onedrive/README.md>
-   [PlMe]: <https://github.com/joemccann/dillinger/tree/master/plugins/medium/README.md>
-   [PlGa]: <https://github.com/RahulHP/dillinger/blob/master/plugins/googleanalytics/README.md>
